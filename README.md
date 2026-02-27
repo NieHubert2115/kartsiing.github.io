@@ -4,9 +4,9 @@
 
 ## 📊 Statystyki Sezonu
 
-- **Wyścigów:** 1
-- **Zawodników:** 19
-- **Punktów Lidera:** 25
+- **Wyścigów:** 2
+- **Zawodników:** 23
+- **Punktów Lidera:** 40
 - **Aktualny Lider:** 🏆 OSKI96
 
 ## 🏆 System punktacji
@@ -16,29 +16,33 @@
 
 ## 📋 Klasyfikacja Generalna
 
-| Pozycja | Zawodnik | Styczen | Suma Punktów |
-| --- | --- | --- | --- |
-| 🥇 1 | **OSKI96** | 25 | **25** |
-| 🥈 2 | **MICHAŁ W.** | **$${\color{purple}19}$$** | **19** |
-| 🥉 3 | **HUBERT CH** | 15 | **15** |
-| 4 | **POTULLL** | 12 | **12** |
-| 5 | **TOMASZ W** | 10 | **10** |
-| 6 | **ZĄBEK_B** | **$${\color{red}8}$$** | **8** |
-| 7 | **MIKOŁAJ T.** | **$${\color{red}6}$$** | **6** |
-| 8 | **KORNEL P.** | 4 | **4** |
-| 9 | **SCOOBANY635** | 2 | **2** |
-| 10 | **ORZEL_** | 1 | **1** |
-| 11 | **KOWAL123** | - | **0** |
-| 12 | **ADAMWOL** | - | **0** |
-| 13 | **W PIOTR** | - | **0** |
-| 14 | **TOMASZ K.** | - | **0** |
-| 15 | **RAFAŁ M.** | - | **0** |
-| 16 | **MICHAŁ B.** | - | **0** |
-| 17 | **KAMIL K.** | - | **0** |
-| 18 | **GRZEGORZ T.** | - | **0** |
-| 19 | **M_C** | - | **0** |
+| Pozycja | Zawodnik | Styczen | Luty | Suma Punktów |
+| --- | --- | --- | --- | --- |
+| 🥇 1 | **OSKI96** | 25 | 15 | **40** |
+| 🥈 2 | **HUBERT CH** | 15 | 25 | **40** |
+| 🥉 3 | **MICHAŁ W.** | **$${\color{purple}19}$$** | 6 | **25** |
+| 4 | **JORDAN K** | - | 18 | **18** |
+| 5 | **MIKOŁAJ T.** | **$${\color{red}6}$$** | 10 | **16** |
+| 6 | **KORNEL P.** | 4 | 12 | **16** |
+| 7 | **POTULLL** | 12 | 2 | **14** |
+| 8 | **TOMASZ W** | 10 | - | **10** |
+| 9 | **ZĄBEK_B** | **$${\color{red}8}$$** | - | **8** |
+| 10 | **KAMIL K.** | - | 8 | **8** |
+| 11 | **GOOOF** | - | 4 | **4** |
+| 12 | **ORZEL_** | 1 | 1 | **2** |
+| 13 | **SCOOBANY635** | 2 | - | **2** |
+| 14 | **ADAMWOL** | - | - | **0** |
+| 15 | **KOWAL123** | - | - | **0** |
+| 16 | **RAFAŁ M.** | - | - | **0** |
+| 17 | **TOMASZ K.** | - | - | **0** |
+| 18 | **W PIOTR** | - | - | **0** |
+| 19 | **MICHAŁ B.** | - | - | **0** |
+| 20 | **M_C** | - | - | **0** |
+| 21 | **GRZEGORZ T.** | - | - | **0** |
+| 22 | **MICHAŁ G.** | - | - | **0** |
+| 23 | **MAALGOSIA** | - | - | **0** |
 
 ---
 
-*Ostatnia aktualizacja: 14.01.2026 09:57*  
+*Ostatnia aktualizacja: 27.02.2026 10:25*  
 *Wygenerowano automatycznie przez system Puchar Kartingu 2026*

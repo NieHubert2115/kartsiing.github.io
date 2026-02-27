@@ -2,6 +2,7 @@
 import pandas as pd
 import sys
 import os
+import json
 from pathlib import Path
 from datetime import datetime
 
@@ -11,7 +12,7 @@ def calculate_points(position, fastest_lap_time, all_times, driver_name, all_dri
     points_table = {1: 25, 2: 18, 3: 15, 4: 12, 5: 10, 6: 8, 7: 6, 8: 4, 9: 2, 10: 1}
     position_points = points_table.get(position, 0) if position <= 10 else 0
     
-    # Bonus za najszybsze okrążenie (każdy zawodnik może go dostać)
+    # Bonus za najszybsze okrążenie (opcjonalny - tylko jeśli są dostępne czasy)
     fastest_bonus = 0
     if fastest_lap_time and len(all_drivers_with_times) > 0:
         try:
@@ -19,10 +20,11 @@ def calculate_points(position, fastest_lap_time, all_times, driver_name, all_dri
             valid_times = []
             for driver_data in all_drivers_with_times:
                 time_val = driver_data['time']
-                if pd.notna(time_val) and str(time_val).replace('.', '').replace(',', '').isdigit():
+                if pd.notna(time_val) and str(time_val).replace('.', '').replace(',', '').replace('-', '').isdigit():
                     valid_times.append(float(str(time_val).replace(',', '.')))
             
-            if valid_times:
+            # Tylko jeśli są jakiekolwiek prawidłowe czasy, przyznaj bonus
+            if valid_times and len(valid_times) > 0:
                 fastest_time = float(str(fastest_lap_time).replace(',', '.'))
                 if fastest_time == min(valid_times):
                     fastest_bonus = 1
@@ -200,6 +202,17 @@ def read_race_results(csv_file):
 def update_general_classification(race_results, race_name, classification_file='klasyfikacja_generalna.csv'):
     """Aktualizuje klasyfikację generalną"""
     
+    # Wczytaj historyczne dane o najszybszych okrążeniach i karach
+    metadata_file = 'race_metadata.json'
+    if os.path.exists(metadata_file):
+        with open(metadata_file, 'r', encoding='utf-8') as f:
+            metadata = json.load(f)
+            fastest_lap_data = metadata.get('fastest_laps', {})
+            penalty_data = metadata.get('penalties', {})
+    else:
+        fastest_lap_data = {}
+        penalty_data = {}
+    
     # Sprawdź czy plik klasyfikacji istnieje
     if os.path.exists(classification_file):
         df_general = pd.read_csv(classification_file, encoding='utf-8-sig')
@@ -214,35 +227,52 @@ def update_general_classification(race_results, race_name, classification_file='
     if race_name not in df_general.columns:
         df_general[race_name] = 0
     
-    # Znajdź zawodników z najszybszym okrążeniem i zbierz kary
+    # Znajdź zawodników z najszybszym okrążeniem i zbierz kary dla TEGO wyścigu
     fastest_lap_drivers = []
     race_penalties = {}
     if race_results:
-        # Znajdź najszybszy czas
+        # Znajdź najszybszy czas (tylko jeśli są dostępne czasy)
         valid_times = []
         for result in race_results:
             if result.get('fastest_lap') and pd.notna(result['fastest_lap']):
                 try:
-                    time_val = float(str(result['fastest_lap']).replace(',', '.'))
-                    valid_times.append(time_val)
+                    time_str = str(result['fastest_lap']).replace(',', '.').replace('-', '').strip()
+                    if time_str and time_str.replace('.', '').isdigit():
+                        time_val = float(time_str)
+                        valid_times.append(time_val)
                 except (ValueError, TypeError):
                     pass
         
-        if valid_times:
+        # Tylko jeśli są prawidłowe czasy, znajdź najszybsze okrążenie
+        if valid_times and len(valid_times) > 0:
             fastest_time = min(valid_times)
             for result in race_results:
                 if result.get('fastest_lap') and pd.notna(result['fastest_lap']):
                     try:
-                        time_val = float(str(result['fastest_lap']).replace(',', '.'))
-                        if time_val == fastest_time:
-                            fastest_lap_drivers.append(result['driver'])
+                        time_str = str(result['fastest_lap']).replace(',', '.').replace('-', '').strip()
+                        if time_str and time_str.replace('.', '').isdigit():
+                            time_val = float(time_str)
+                            if time_val == fastest_time:
+                                fastest_lap_drivers.append(result['driver'])
                     except (ValueError, TypeError):
                         pass
+        
         # Zbierz kary
         for result in race_results:
             p = result.get('penalty', 0) if result.get('penalty') is not None else 0
             if p and p > 0:
                 race_penalties[result['driver']] = p
+    
+    # Zaktualizuj dane dla tego wyścigu
+    fastest_lap_data[race_name] = fastest_lap_drivers
+    penalty_data[race_name] = race_penalties
+    
+    # Zapisz zaktualizowane metadane
+    with open(metadata_file, 'w', encoding='utf-8') as f:
+        json.dump({
+            'fastest_laps': fastest_lap_data,
+            'penalties': penalty_data
+        }, f, ensure_ascii=False, indent=2)
 
     # Aktualizuj punkty dla każdego zawodnika z wyścigu
     for result in race_results:
@@ -276,7 +306,7 @@ def update_general_classification(race_results, race_name, classification_file='
     # Zapisz zaktualizowaną klasyfikację
     df_general.to_csv(classification_file, index=False, encoding='utf-8-sig')
     
-    return df_general, {race_name: fastest_lap_drivers}, {race_name: race_penalties}
+    return df_general, fastest_lap_data, penalty_data
 
 def generate_readme_table(df_general, fastest_lap_data=None, penalty_data=None, output_file='README.md'):
     """Generuje README.md z tabelą wyników"""
