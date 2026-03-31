@@ -3,13 +3,19 @@
     "Styczen": [
       "MICHAŁ W."
     ],
-    "Luty": []
+    "Luty": [
+      "SCOOBANY635"
+    ],
+    "Marzec": [
+      "MICHAŁ W."
+    ]
   },
   "penalties": {
     "Styczen": {
       "ZĄBEK_B": 5.0,
       "MIKOŁAJ T.": 5.0
     },
-    "Luty": {}
+    "Luty": {},
+    "Marzec": {}
   }
 }
